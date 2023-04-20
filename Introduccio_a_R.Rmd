@@ -1,0 +1,113 @@
+---
+title: "Introducció a R"
+output: pdf_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+R és un llenguatge de programació *interpretat*: les ordres s'escriuen en text
+pla, i són aleshores *interpretades* i executades. Aquesta mena de llenguatges
+són convenients per guardar i compartir els comandaments en arxius de text que
+són fàcilment llegits en qualsevol ordinador, i que anomenem **scripts**.
+
+Quan invoques R en l'ordinador, s'obri una *consola*: un intérpret de les ordres
+que seqüencialment li dónes, de forma interactiva.
+
+## Funcions
+R és també el que es coneix com un llenguatge *funcional*: moltes de les ordres
+que donem són *funcions*, que operen sobre uns paràmetres o arguments i
+produeixen un resultat. Als exemples següents es demostra la manera d'invocar
+algunes funcions:
+
+```{r funcions}
+sqrt(25)
+log10(1000)
+startsWith('Funció', 'Fun')
+rep('A', 3)
+seq(from = 0, to = 200, by = 2)
+```
+
+Els paràmetres d'una funció s'indiquen dins els parèntesis que segueixen sempre
+el nom de la funció. Els paràmetres se separen per comes. Alguns, tenen nom.
+I algunes funcions es poden invocar sense cap paràmetre, com `ls()`. Per saber
+què fa una funció i quins paràmetres necessita o admet, utilitzem la funció
+`help()`. Executa, per exemple, `help(seq)`.
+
+Als exemples anteriors, el resultat d'executar una funció simplement apareix en
+la línia o les línies següents, precedit per l'índex del primer element mostrat
+en eixa línia entre claudàtors (e.g., "[1]"). Podem també executar una funció
+dins d'una altra, i el resultat d'aquella esdevindrà un paràmetre d'aquesta.
+Per exemple:
+
+```{r nested}
+log10(abs(-1235))
+```
+
+## Variables i classes
+Moltes vegades volem guardar el resultat d'una funció (o un número, etc), per
+poder manipular-lo posteriorment. Aleshores hem d'**assignar** el resultat de
+la funció (o el número, etc.) a una **variable**, el nom de la qual pot ser
+qualsevol combinació de lletres, números i els símbols "`_`" i "`.`",
+sempre que no coïncidisca amb una paraula reservada, ni comence per un número.
+Per assignar valors a variables utilitzem l'**operador** "`<-`":
+
+```{r assign}
+Dits    <- 5
+Pes_net <- 62.5
+inicial <- 'J'
+meitat  <- Dits / 2
+vers    <- 'Veles e vents han mos desigs complir'
+result  <- log(Pes_net)
+result
+```
+
+Les variables (com les funcions) són **objectes**, d'alguna classe: número,
+caràcter, "funció", lògica (`TRUE` o `FALSE`), etc. La funció `class()` ens
+diu de quina classe és un objecte. Observa que els caràcters o les cadenes
+de caràcters s'han de definir entre cometes, simples o dobles. Si no, R pensa
+que cada paraula és el nom d'algun objecte.
+
+Al llarg de la sessió, poden anar acumulant-se variables en la memòria. Podem
+consultar quines variables tenim creades amb la funció `ls()`. I podem eliminar-ne
+amb la funció `rm()`.
+
+## Vectors
+Un vector en R és un conjunt ordenat d'elements de la mateixa classe, i es pot
+crear amb la funció `c()` (de "combinar"):
+
+```{r vector}
+noms <- c('Pep', 'Calixte', 'Maria', 'Teresa')
+edats <- c(14, 15, 13, 16)
+```
+
+Moltes funcions i operadors en R accepten vectors com a arguments:
+
+```{r vectorization}
+paste(noms, edats, sep = ': ')
+log10(c(1000, 5000, 10000, 50000))
+edats - 4
+2 ^ edats
+```
+
+Com que estan ordenats, els elements d'un vector s'identifiquen pel seu *índex*,
+o posició. I podem accedir als elements d'un vector indicant-ne l'índex o els
+índexos entre claudàtors:
+
+```{r indexing}
+edats[3]
+noms[c(1,2,3)]
+```
+
+Els vectors són una manera d'organitzar dades. N'hi ha d'altres, com les llistes
+i els marcs de dades.
+
+## Recursos
+
+Si vols aprendre R, tens multitud de recursos disponibles. Per exemple:
+
+- [La documentació oficial (https://cran.r-project.org/)](https://cran.r-project.org/): en anglés, però amb una secció de documentació *contribuïda*, que inclou alguns manuals en castellà.
+- [*R para Análisis Científicos Reproducibles* (https://swcarpentry.github.io/r-novice-gapminder-es/)](https://swcarpentry.github.io/r-novice-gapminder-es/): materials d'un curs molt didàctic i recomanable.
+- [*YaRrr! The Pirate's Guide to R* (https://bookdown.org/ndphillips/YaRrr/)](https://bookdown.org/ndphillips/YaRrr/): en anglés.

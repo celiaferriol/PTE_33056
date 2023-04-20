@@ -1,0 +1,263 @@
+---
+title: "Pràctica amb ordinador 3. Filogènia mitocondrial"
+subtitle: "Principals Transicions Evolutives"
+output:
+   pdf_document:
+      extra_dependencies:
+         babel: "catalan"
+         booktabs: NULL
+date: "`r Sys.Date()`"
+bibliography: "references.bib"
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preparació de l'ordinador
+
+En aquesta pràctica utilitzarem els paquets de R `DECIPHER` [@Wright2016] i
+`phangorn` [@Schliep2011], que pots instal·lar amb els comandaments següents:
+
+```{r install, eval=FALSE}
+install.packages('phangorn')
+if (!requireNamespace('BiocManager', quietly=TRUE))
+    install.packages('BiocManager')
+BiocManager::install('DECIPHER')
+```
+
+A més, necessitaràs l'arxiu `primates.fasta`, que pots trobar a l'aula virtual
+o segurament també a l'enllaç següent: [una adreça](https://github.com/ignasilucas/etc).
+Assegura't de què coneixes l'adreça de l'arxiu al teu ordinador, així com el
+directori de treball de la teua sessió de R. Determina el directori de treball
+amb el comandament `getwd()` i per facilitar les coses, guarda una còpia de
+`primates.fasta` en eixa mateixa carpeta.
+
+# Objectiu
+L'objectiu d'esta pràctica és reproduïr la filogènia dels primats catarrins a
+partir de les seqüències mitocondrials completes de 13 individus de 9 espècies
+diferents, tal com apareix a la figura següent, que apareix al web de PhyloTree:
+[http://www.phylotree.org/resources/mtDNA_human_relatives.htm](http://www.phylotree.org/resources/mtDNA_human_relatives.htm).
+
+![](../../imatges/Catarrhini_phylogeny.png)
+
+El procediment hauria d'incloure els passos següents:
+
+1. Descarregar les seqüències nucleotídiques dels genomes mitocondrials.
+2. Alinear-les amb el mètode implementat al paquet `DECIPHER`.
+3. Obtenir la filogènia mitjançant algun mètode ràpid, com ara el *Neighbor-Joining*.
+
+# Descàrrega de les seqüències.
+
+La taula 1 indica els números d'accés de les seqüències que necessitem i
+l'espècie a la qual pertany cada seqüència.
+
+```{r taula1, echo=FALSE}
+sequencies <- data.frame(
+   Acc = c('Y18001', 'AJ309865', 'AY612638', 'X99256',
+            'D38115', 'D38114', 'X93347', 'GU189661',
+            'D38113', 'X93335', 'AM948965',
+            'J01415', 'AF347015'),
+   Especie = c('Papio hamadryas', 'Macaca sylvanus', 'Macaca mulatta', 'Hylobates lar',
+                'Pongo pygmaeus', 'Gorilla gorilla', 'Gorilla gorilla gorilla', 'Pan paniscus',
+                'Pan troglodytes', 'Pan troglodytes verus', 'Homo sapiens neanderthalensis',
+                'Homo sapiens (Cambridge)', 'Homo sapiens (Yoruba)')
+)
+sequencies$Acc <- paste0('[', sequencies$Acc,
+                         '](https://www.ebi.ac.uk/ena/browser/view/',
+                         sequencies$Acc, ')')
+knitr::kable(sequencies, booktabs = TRUE, col.names = c("Número d'accés", "Espècie"), linesep = '',
+      caption = "Números d'accés i espècies de les seqüències mitocondrials seleccionades.")
+```
+
+Pots descarregar les seqüències en format FASTA, una a una, seguint els enllaços
+de la Taula 1. Caldria guardar-les totes al mateix arxiu de text pla, respectant
+el format FASTA. Alternativament, podem utilitzar els comandaments següents per
+descarregar en la carpeta de treball un arxiu FASTA amb les 13 seqüències:
+
+```{r descarrega}
+Numeros <- c('Y18001', 'AJ309865', 'AY612638', 'X99256', 'D38115',
+             'D38114', 'X93347', 'GU189661', 'D38113', 'X93335',
+             'AM948965', 'J01415', 'AF347015')
+API <- 'https://www.ebi.ac.uk/ena/browser/api/fasta/'
+URL <- paste0(API, paste(Numeros, collapse = ','))
+download.file(URL, destfile = 'primats.fasta')
+```
+
+Executa el codi anterior i comprova que a la carpeta de treball se t'ha descarregat
+un arxiu anomenat `primats.fasta`. Podràs obrir-lo amb un editor de text, com el
+bloc de notes en MS Windows. Però no és recomanable editar manualment els arxius
+de dades
+
+# Alineament
+
+Per alinear les 13 seqüències, necessitem: carregar el paquet `DECIPHER`, llegir
+les seqüències i guardar-les en un objecte dins la sessió de R, i aplicar la
+funció `AlignSeqs()` per crear un nou objecte amb les seqüències alineades. Executa
+els comandaments següents:
+
+```{r llegir, message=FALSE}
+library('DECIPHER')
+senseAlinear <- readDNAStringSet('primats.fasta')
+senseAlinear
+```
+
+Ara, l'objecte `senseAlinear` conté en la memòria de treball les 13 seqüències
+mitocondrials. Observa com en invocar el nom de l'objecte, ens apareix un
+resum del seu contingut.
+
+```{r alinear, message=FALSE, results='hide'}
+alineades <- AlignSeqs(senseAlinear)
+alineades
+```
+
+Observa que la funció `AlignSeqs()` no modifica l'objecte original (`senseAlinear`),
+sinó que en crea un altre. Necessitem assignar (`<-`) el resultat de la funció
+a un nou objecte (`alineades`) per tal de retenir en la memòria de treball l'alineament.
+Observaràs que la funció `AlignSeqs()` produeix alguns missatges sobre el procés.
+Podries suprimir eixos missatges amb l'argument opcional `verbose = FALSE`.
+Observa també que el nou objecte `alineades` té un aspecte diferent al de
+`senseAlinear`. Per tal de veure l'alineament complet, executa el comandament
+següent:
+
+```{r browse, eval=FALSE}
+BrowseSeqs(alineades)
+```
+
+Hauria d'obir-se una nova pestanya en el navegador on es mostra l'alineament.
+Observa'l detingudament. Per què creus que algunes seqüències semblen tenir un
+fragment addicional en un extrem o en l'altre?
+
+L'objecte `alineades` només existeix en la memòria de treball, i pot desaparèixer
+quan es tanque la sessió. Si vols conservar l'alineament que has generat en un
+arxiu FASTA, pots utilitzar el comandament següent:
+
+```{r guardar}
+writeXStringSet(alineades, 'alineades.fasta')
+```
+
+En l'aula virtual, o bé en [aquest enllaç]() pots descarregar un arxiu FASTA amb
+un alineament alternatiu. Una volta descarregat, pots obrir-lo amb la funció
+`readDNAStringSet()`, i visualitzar-lo amb `BrowseSeqs()`. En què es diferencia
+de l'alineament que has obtingut tu? Continua treballant amb l'alineament que
+consideres més adient.
+
+# Reconstrucció filogenètica
+Una vegada disposem d'un alineament, podem inferir les relacions filogenètiques
+entre les 13 seqüències. Hi ha molts mètodes diferents: màxima parsimònia, màxima
+versemblança, UPGMA, etc. Utilitzarem el mètode de Neighbor-Joining, basat en la
+matriu de distàncies genètiques entre les seqüències, perquè és un mètode ràpid.
+
+Primer, carreguem el paquet `phangorn`:
+
+```{r phangorn, message=FALSE}
+library('phangorn')
+```
+
+La funció `NJ()` de `phangorn` que produirà l'arbre filogenètic s'aplica sobre
+una **matriu de distàncies**. Per calcular la matriu de distàncies entre les 13
+seqüències nucleotídiques, podem aplicar la funció `dist.dna()`, la qual necessita
+com a arguments un alineament *guardat com a objecte de classe `DNAbin`* i un
+model d'evolució molecular. Primer, creem un objecte de classe `DNAbin` amb el
+mateix alineament que tenim guardat en l'objecte `alineades` (o en el que hages
+triat), i que és de classe `DNAStringSet`:
+
+```{r classe, results='hide'}
+aln <- as.DNAbin(alineades)
+aln
+```
+
+En segon lloc, hauríem de triar un model d'evolució molecular, dels quals n'hi
+ha molts. Disposem de la funció `modelTest()` per determinar quin és el model
+d'evolució que millor s'ajusta a les nostres dades. Però tarda uns quants minuts
+en comprovar tots els models. Per estalviar aquest temps, la taula 2 mostra els
+cinc millors models d'evolució molecular del mitocondri dels primats. És a dir,
+els cinc models amb un *criteri d'informació bayesià* (BIC) menor. El criteri
+d'informació d'Akaike (AIC) és una altra manera de comparar els models.
+
+```{r modelTest, echo=FALSE}
+models <- data.frame(
+   Model = c('TPM2u+G(4)+I', 'TIM2+G(4)+I', 'TVM+G(4)+I', 'GTR+G(4)+I', 'HKY+G(4)+I'),
+   logLikelihood = c(-73032.87, -73029.03, -73029.47, -73026.01, -73052.22),
+   AIC = c(146125.7, 146120.1, 146122.9, 146118.0, 146162.4),
+   BIC = c(146357.5, 146359.6, 146370.2, 146373.0, 146386.5)
+)
+knitr::kable(models, linesep = '',
+             caption = "Selecció de models d'evolució molecular que millor s'ajusten a l'alineament.")
+```
+
+El model TPM2u+G(4)+I és el model de tres paràmetres de Kimura, també congut com
+K81 [@Posada2008], amb variació entre llocs de la taxa de substitucions (+G(4))
+i amb una proporció de llocs invariables (+I). En qualsevol cas, la funció
+`dist.dna()` no ens ofereix totes les opcions (consulta `help(dist.dna)`). Calcularem
+les distàncies amb tres mètodes diferents i comprovarem quina repercusió té el
+model d'evolució molecular en la inferència filogenètica. Executa els comandaments
+següents:
+
+```{r distancies, warning=FALSE}
+distancies.K81  <- dist.dna(aln, model = 'K81',  gamma = 1.19)
+distancies.T92  <- dist.dna(aln, model = 'T92',  gamma = 1.19)
+distancies.F84  <- dist.dna(aln, model = 'F84',  gamma = 1.19)
+distancies.TN93 <- dist.dna(aln, model = 'TN93', gamma = 1.19)
+```
+
+La distància genètica entre dues seqüències és una estimació del nombre mig de 
+substitucions que s'han acumulat *en cada posició*, des de la seua divergència.
+
+Procedim al la inferència filogenètica pel mètode del Neighbor-joining. El comandament
+següent crea un arbre filogenètic, guardat en l'objecte `NJ.K81`. Executa'l i fes
+el mateix per obtenir els arbres corresponent a les altres tres distàncies.
+
+```{r NJ}
+NJ.K81 <- NJ(distancies.K81)
+```
+
+Pots utilitzar el comandament `plot(NJ.K81)` per visualitzar l'arbre. Observaràs
+que hem conservat el nom sencer de cada seqüència, tal com estava definit a l'arxiu
+`primats.fasta`. Els noms tan llargs dificulten la visualització. Afortunadament,
+disposem de la funció `updateLabel()` per modificar aquests noms, tant en un
+arbre (objecte de classe `phylo`) com en una matriu de distàncies (objecte de
+classe `dist`). Fes el següent en cada un dels arbres:
+
+```{r relabel}
+NJ.K81 <- updateLabel(
+   NJ.K81,
+   old = NJ.K81$tip.label,
+   new = c('Papio hamadryas', 'Macaca sylvanus', 'Macaca mulata',
+           'Hylobates lar', 'Pongo pygmaeus', 'Gorilla gorilla',
+           'Gorilla gorilla gorilla', 'Pan paniscus', 'Pan troglodytes',
+           'H. sapiens (Cambridge)', 'H. sapiens neanderthalensis', 
+           'Pan troglodytes verus', 'H. sapiens (Yoruba)')
+)
+```
+
+Com sempre, la funció no modifica el seu argument, sinó que produeix un resultat
+nou, el qual hem d'assignar a un objecte per mantenir-lo en la memòria. Si realment
+volem modificar l'objecte `NJ.K81`, he hem de fer explícit mitjançant `<-`. Ara
+sí, podem visualitzar l'arbre. Abans, però definirem la posició de l'arrel:
+
+```{r plotTree}
+NJ.K81 <- root(NJ.K81, outgroup = c('Papio hamadryas', 'Macaca mulata', 'Macaca sylvanus'))
+plot(NJ.K81)
+```
+
+
+## Qüestionari
+
+1. Deus d'haver notat alguna cosa estranya a l'arbre filogenètic: pots detectar
+el motiu de la discrepància entre l'arbre obtingut i el mostrat al principi d'aquest
+guió? Corregeix-ho.
+
+2. Assegura't d'*arrelar* tots els arbres amb el mateix outgroup abans de
+comparar-los. Determina quines distàncies produeixen arbres més semblants.
+
+3. Consulta l'ajuda de la funció `plot.phylo()`, que és de fet la que s'executa
+quan invoquem `plot()` sobre un objecte de classe `phylo`, com NJ.K81. Veuràs
+que es poden canviar moltes coses. 
+
+# Bootstrap
+
+
+
+# Bibliography

@@ -20,13 +20,13 @@ la llicència **Creative Commons Attribution-ShareAlike 4.0** (CC BY-SA), el tex
 de la qual podeu consultar a l'arxiu LICENSE.txt, i també al web
 [https://creativecommons.org/licenses/by-sa/4.0/](https://creativecommons.org/licenses/by-sa/4.0/).
 
-# Continguts
+## Continguts
 
-- Pràctica 1. Coalescència
+- Pràctica 1. Coalescència.
 - Pràctica 2. Selecció natural i deriva.
 - Pràctica 3. Reconstrucció filogenètica.
-- Pràctica 4. Filogènies datades.
-- Pràctica 5. Genètica de poblacions humanes.
+- Pràctica 4. Rellotge molecular.
+- Pràctica 5. Diversitat genètica humana.
 - Tema 14. La humanitat actual
 
 
