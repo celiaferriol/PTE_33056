@@ -22,7 +22,7 @@ En aquesta pràctica utilitzarem el llenguatge de programació R, opcionalment e
 Primer, cal instal·lar `learnPopGen`, si no s'ha instal·lat abans. Inicia una sessió d'R o d'RStudio i tecleja (o copia i pega) el següent en la consola:
 
 ```{r install, eval=FALSE}
-install.package('learnPopGen')
+install.packages('learnPopGen')
 ```
 
 Una vegada instal·lat, cal carregar el paquet `learnPopGen` en la sessió de treball. Per fer-ho, tecleja el següent en la consola:
