@@ -1,5 +1,7 @@
 # PTE 33056
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/IgnasiLucas/PTE_33056/HEAD)
+
 Aquí tinc els materials didàctics de les pràctiques amb ordinador de l'assignatura
 Principals Transicions Evolutives, del grau de Biologia, de la Universitat de València.
 I algunes diapositives per al tema 14, sobre la humanitat actual.
