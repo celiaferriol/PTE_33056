@@ -1,0 +1,224 @@
+---
+title: "Tema 14. Coalescència"
+author: "J. Ignacio Lucas Lledó"
+date: "21/4/2022"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Població de Fisher-Wright
+
+```{r poblacio, include=FALSE}
+library('learnPopGen')
+if (! file.exists('poblacio.png')) {
+   png(filename = 'poblacio.png', width = 400, height = 550)
+   par(mar = c(5, 4, 0, 0))
+   p <- coalescent.plot(n = 10, ngen = 20, mar = c(0,4.1,0,0))
+   dev.off()
+}
+```
+
+<div style="float: left; width: 50%;">
+![](poblacio.png){width=350px}
+</div>
+
+<div style="float: right; width: 50%;">
+- La mida de la població, *N*, és finita i constant.
+- A cada generació tots els individus (haploides) tenen la mateixa probabilitat de deixar descendència.
+- Si la població és diploide, cada cercle representa una còpia del mateix gen.
+</div>
+
+## Coalescència
+
+```{r trace, include=FALSE}
+remuntar <- function(p, n, LWD=4){
+   N <- dim(p$parent)[2]
+   ngen <- dim(p$parent)[1]
+   stopifnot(n <= N)
+   smpl <- sort(sample(1:N, n))
+   plot(p, mar = c(0,4.1,0,0), sleep = 0)
+   points(smpl, rep(ngen, n), cex = 2, pch = 16)
+   segments(smpl, rep(ngen, n), p$parent[ngen, smpl], rep(ngen-1, n), lwd = LWD)
+   for(i in (ngen-1):1) {
+      smpl <- unique(p$parent[i + 1, smpl])
+      j <- length(smpl)
+      segments(smpl, rep(i, j), p$parent[i, smpl], rep(i-1, j), lwd = LWD)
+   }
+}
+if (! file.exists('poblacio2.png')) {
+   png(filename = 'poblacio2.png', width = 400, height = 550)
+   remuntar(p, 5)
+   dev.off()
+}
+```
+
+<div style="float: left; width: 50%;">
+![](poblacio2.png){width=350px}
+</div>
+
+<div style="float: right; width: 50%;">
+- Seleccionem una **mostra** d'individus de la població **actual**.
+- Tracem la seua genealogia *remuntant-nos en el passat*, generació per generació.
+- Retrocedint en el temps, els llinatges conflueixen: **coalescència**.
+- El **MRCA** és l'ancestre comú **més recent** de la mostra.
+</div>
+
+## Coalescència {.flexbox .vcenter .smaller}
+
+```{r forma, fig.width=7, fig.height=4}
+library(ape)
+par(mfrow = c(1,3), mar = c(0,2,0,2))
+plot(rcoal(10), direction = 'downwards', show.tip.label = FALSE)
+plot(rcoal(10), direction = 'downwards', show.tip.label = FALSE)
+plot(rcoal(10), direction = 'downwards', show.tip.label = FALSE)
+par(mfrow = c(1,1), mar = c(5.1, 4.1, 4.1, 2.1))
+```
+
+El procés *estocàstic* de la coalescència genera arbres amb una froma peculiar: amb una disminució de la *taxa de coalescència* cap al passat.
+
+## Coalescència de dues seqüències {.vcenter .flexbox .smaller}
+
+El **nombre de generacions** que hem de retrocedir en el passat per trobar l'ancestre comú de **dues** còpies d'un gen en una població de Fisher-Wright, $T_2$, és una variable aleatòria amb una **distribució geomètrica**:
+
+$P(T_2 = j) = (1 - p)^{j-1} p$
+
+$P(T_2 = j)$ és la probabilitat de què la coalescència es produïsca exactament *j* generacions en el passat. On *p* és la probabilitat de què la coalescència es produïsca en cada generació. Si la població és **haploide**:
+
+$p = \frac{1}{N}$
+
+és la probabilitat de què dues còpies d'un gen tinguen el mateix ancestre en la generació anterior. Per tant:
+
+$P(T_2=j) = \left(1 - \frac{1}{N}\right)^{j-1} \frac{1}{N}$
+
+## Coalescència de dues seqüències {.vcenter .flexbox}
+
+```{r taula1}
+library(kableExtra)
+t <- data.frame(
+   Ploidia  = c('haploide', 'diploide'),
+   p        = c('$1/N$', '$1/2N$'),
+   probabilitat = c('$\\left( 1 - \\frac{1}{N}\\right)^{j-1}\\frac{1}{N}$', '$\\left( 1 - \\frac{1}{2N}\\right)^{j-1}\\frac{1}{2N}$'),
+   esperanca = c('N','2N'),
+   variancia = c('$N(N-1)$', '$2N(2N-1)$')
+)
+kable(t, col.names = c('Ploidia', 'Paràmetre', '$P(T_2=j)$', 'E$(T_2)$', 'Var$(T_2)$')) %>% kable_styling()
+```
+
+## En temps continu {.flexbox .vcenter}
+
+La distribució geomètrica és *discreta*: només definida per valors enters de $T_2$.
+Es pot aproximar amb la **distribució exponencial** (que és contínua), quan *N* és gran.
+En haploides:
+
+$P(T_2 > j) = \left(1-\frac{1}{N}\right)^j \simeq e^{-\frac{j}{N}}$
+
+$P(T_2 \leq j) \simeq 1 - e^{-\frac{j}{N}}$
+
+En diploides:
+
+$P(T_2 > j) \simeq e^{-\frac{j}{2N}}$
+
+$P(T_2 \leq j) \simeq 1 - e^{-\frac{j}{2N}}$
+
+## En temps continu
+
+```{r continu, include=FALSE}
+if (! file.exists("continu.png")) {
+   png(filename = "continu.png", width = 350, height = 500)
+   par(mar = c(0, 5, 0, 2))
+   plot(rcoal(10), direction = "downwards", show.tip.label = FALSE)
+   axis(2, las=2)
+   dev.off()
+}
+```
+
+<div style="float: left; width: 50%;">
+![](continu.png)
+</div>
+
+<div style="float: right; width: 50%;">
+- Definim el **temps** continu: $t = \frac{j}{N}$ en haploides, i $t = \frac{j}{2N}$ en
+diploides.
+
+- Una unitat de temps de coalescència és el nombre de generacions esperat fins la coalescència
+de dues seqüències: $N$ generacions en haploides, i $2N$ generacions en diploides.
+</div>
+
+## Mida poblacional efectiva
+
+- Les poblacions reals es diferencien de les de Fisher-Wright.
+- En lloc d'utilitzar la mida poblacional real, $N$, utilitzem la **mida poblacional efectiva**, $N_e$: mida d'una població de Fisher-Wright que experimentaria la mateixa quantitat de deriva que la població real.
+- En avant, supose que la població és diploide amb mida efectiva $N_e$.
+
+## Coalescència entre *n* seqüències {.smaller}
+
+Aproximació: màxim d'una coalescència entre dos llinatges per generació.
+
+El temps (en generacions) que hem de retrocedir per trobar **la primera coalescència**
+entre *n* còpies d'un gen és una variable estocàstica amb distribució geomètrica.
+
+La probabilitat de produir-se una coalescència entre dues còpies qualsevols d'entre una mostra d'*n* còpies d'un gen en la generació immediatament anterior, en una població diploide de mida efectiva $N_e$ és:
+
+$p = {n \choose 2}\frac{1}{2N_e} = \frac{n(n-1)}{2}\cdot \frac{1}{2N_e}$
+
+Per tant:
+
+$P(T_n = j) = \left(1 - \frac{n(n-1)}{4N_e} \right)^{j-1} \cdot \frac{n(n-1)}{4N_e}$
+
+## Coalescència entre *n* seqüències {.smaller}
+
+En **temps continu**, amb $t = \frac{j}{2N_e}$:
+
+$P(T_n \leq t) = 1 - e^{-{n \choose 2}t} = 1 - e^{-\frac{n(n-1)t}{2}}$
+
+És a dir, el temps que ens hem de remuntar en el passat per tal que la genealogia de $n$
+llinatges es condense en $n-1$ llinatges és aproximadament exponencial amb paràmetre
+${n \choose 2}$.
+
+$f(t) = {n \choose 2}e^{-{n \choose 2}t}$, per $t \geq 0$.
+
+$F(t) = P(T_n \leq t) = 1 - e^{-{n \choose 2} t}$, per $t \geq 0$.
+
+$\mathrm{E}(t) = \frac{1}{{n \choose 2}} = \frac{2}{n(n-1)} \qquad$; $\qquad \mathrm{var}(t) = \frac{1}{{n \choose 2}^2} = \left( \frac{2}{n(n-1)}\right)^2$
+
+## Coalescència entre *n* seqüències
+
+```{r epoques}
+set.seed(2021)
+z <- rcoal(5)
+f <- z$edge[,2] %in% 1:5
+coalTimes <- unique(c(0, z$edge.length[f]))
+par(mar = c(0, 5, 0, 7))
+plot(z, direction = 'downwards', show.tip.label = FALSE, edge.width = 2, x.lim=6)
+axis(2)
+segments(1:5, coalTimes, c(6,6,6,6,6), lty = 2)
+axis(4, at = (coalTimes[1:4] + coalTimes[2:5]) / 2, tick = FALSE, lwd = 0,
+     labels = c(expression(T[5]), expression(T[4]), expression(T[3]), expression(T[2])),
+     las = 2)
+```
+
+## Coalescència entre *n* seqüències {.vcenter .flexbox}
+
+La mitjana de l'alçada total de l'arbre de coalescència entre $n$ seqüències homòlogues és:
+
+$\mathrm{E}(H_n) = \sum_{k=2}^n \mathrm{E}(T_k) = \sum_{k=2}^n \frac{2}{k(k-1)} = 2\left( 1 - \frac{1}{n}\right) \approx 2$
+
+(Veure l'apèndix). En unitats de $2N_e$ generacions en poblacions diploides, $\mathrm{E}(H_n)\approx 4N_e$.
+Mentre que en poblacions haploides, 2 unitats de temps són $2N_e$ generacions.
+
+$\mathrm{var}(H_n) = \sum_{k=2}^n\mathrm{var}(T_n) = 4\sum_{k=2}^n\frac{1}{k^2(k-1)^2}$
+
+## Apèndix {.smaller}
+Per què $\sum_{k=2}^n \frac{2}{k(k-1)} = 2\left(1 - \frac{1}{n}\right)$?
+
+$$
+\sum_{k=2}^n \frac{2}{k(k-1)} = 2\cdot \sum_{k=2}^n \frac{1}{k(k-1)}\\
+=2\cdot \sum_{k=2}^n \frac{k - (k - 1)}{k(k-1)}\\
+=2\cdot \sum_{k=2}^n \left( \frac{k}{k(k-1)} - \frac{k-1}{k(k-1)}\right)\\
+=2\cdot \sum_{k=2}^n \left( \frac{1}{k-1} - \frac{1}{k}\right)\\
+=2\cdot \left( 1 - \frac{1}{2} + \frac{1}{2} - \frac{1}{3} + \frac{1}{3} - \frac{1}{4} +\ldots +\frac{1}{n-1} - \frac{1}{n}\right)\\
+=2\cdot \left(1 - \frac{1}{n}\right)
+$$

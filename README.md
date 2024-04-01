@@ -2,7 +2,7 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/IgnasiLucas/PTE_33056/HEAD)
 
-Aquí tinc els materials didàctics de les pràctiques amb ordinador de l'assignatura
+Ací tinc els materials didàctics de les pràctiques amb ordinador de l'assignatura
 Principals Transicions Evolutives, del grau de Biologia, de la Universitat de València.
 I algunes diapositives per al tema 14, sobre la humanitat actual.
 
@@ -11,11 +11,9 @@ i sol·licitar-me que incorpore les teues edicions (*pull request*). Tota ajuda 
 Pots consultar els *issues* actuals, per conéixer les oportunitats de col·laboració ja
 existents.
 
-El meu objectiu és realitzar les pràctiques íntegrament en R. En principi, estic elaborant
-guions en Rmarkdown, perquè la universitat encara no ofereix Jupyter Notebooks a les aules
-d'informàtica, ni tampoc de forma remota. En algun moment, prepararé quaderns Jupyter.
-A més llarg termini, si el grau afavoreix l'aprenentatge de Python, podríem traduir les
-pràctiques a Python. I al castellà també, clar.
+El meu objectiu és realitzar les pràctiques íntegrament en R. Vaig començar elaborant els
+guions en Rmarkdown. Però actualment sembla que podrem utilitzar Jupyter Lab en les aules
+d'informàtica i he preparat quaderns Jupyter.
 
 Tots els documents d'este repositori estan a disposició pública sota els termes de
 la llicència **Creative Commons Attribution-ShareAlike 4.0** (CC BY-SA), el text complet
