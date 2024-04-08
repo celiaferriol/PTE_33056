@@ -1,0 +1,67 @@
+Selección y deriva;;;;;;;;;
+;;;;;;;;;
+Utiliza las tablas siguientes para tomar nota de los resultados correspondientes a las 30 repeticiones. Anota el número de simulaciones en las ;;;;;;;;;
+que se fija el alelo A (p=1), el a (p=0) o ninguno (1>p>0).;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=10, G=30 ;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=10, G=100;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=10, G=300;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=50, G=30;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=50, G=100;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=50, G=300;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=100, G=30;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=100, G=100;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;
+;;;;;;;;;
+;Dominante ;;;Recesivo ;;;Heterosis;;
+N=100, G=300;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0;p=1 ;1>p>0 ;p=0
+p0 = 0.05;;;;;;;;;
+p0 = 0.20;;;;;;;;;
+p0 = 0.40;;;;;;;;;
+p0 = 0.50;;;;;;;;;

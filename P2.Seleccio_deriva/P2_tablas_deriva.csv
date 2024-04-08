@@ -1,0 +1,58 @@
+Deriva genética;;;
+;;;
+Utiliza las tablas siguientes para tomar nota en qué frecuencia se fija en la población el alelo A (p=1) ;;;
+o el a (p=0) sobre las 100 repeticiones realizadas en cada tanda.;;;
+;;;
+N=10, G=30 ;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=10, G=100;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=10, G=300;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;0,1;0,9;0
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=50, G=30;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=50, G=100;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=50, G=300;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=100, G=30;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=100, G=100;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;
+;;;
+N=100, G=300;p=1 ;p=0 ;Sin fijación
+p0 = 0.10;;;
+p0 = 0.20;;;
+p0 = 0.40;;;
+p0 = 0.50;;;

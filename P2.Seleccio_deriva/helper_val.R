@@ -1,8 +1,8 @@
-# En el paquete "learnPopGen", la función "plot.genetic.drift()" produce
-# más de un gráfico con la opción "show = 'fixed'", y alarga el documento 
-# innecesariamente. En este script se redefine la función para añadir la
-# opción "show = 'fixedLast'", que permite mostrar un único gráfico de las
-# proporciones de poblaciones donde se han fijado los alelos "a" o "A".
+# Al paquet "learnPopGen", la funció "plot.genetic.drift()" produeix
+# més d'un gràfic amb l'opció "show = 'fixed'", i allarga el document
+# innecessàriament. En aquest script re-definisc la funció per afegir
+# l'opció "show = 'fixedLast'", que permet mostrar un únic gràfic de
+# les proporcions de poblacions on s'han fixat els al·lels "a" o "A".
 
 plot.genetic.drift<-function(x,...){
 	if(hasArg(show)) show<-list(...)$show
