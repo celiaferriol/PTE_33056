@@ -1,0 +1,28 @@
+PLINK v1.90b6.14 64-bit (7 Jan 2020)
+Options in effect:
+  --dog
+  --file noHH/cf6
+  --make-bed
+  --out noHH/cf6
+  --set-hh-missing
+
+Start time: Thu Feb  1 23:05:53 2024
+
+Random number seed: 1706825153
+257866 MB RAM detected; reserving 128933 MB for main workspace.
+Scanning .ped file... done.
+Performing single-pass .bed write (76987 variants, 86 dogs).
+--file: noHH/cf6-temporary.bed + noHH/cf6-temporary.bim +
+noHH/cf6-temporary.fam written.
+76987 variants loaded from .bim file.
+86 dogs (36 males, 38 females, 12 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to noHH/cf6.nosex .
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 86 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.994934.
+76987 variants and 86 dogs pass filters and QC.
+Note: No phenotypes present.
+--make-bed to noHH/cf6.bed + noHH/cf6.bim + noHH/cf6.fam ... done.
+
+End time: Thu Feb  1 23:05:53 2024
